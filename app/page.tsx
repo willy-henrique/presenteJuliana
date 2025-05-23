@@ -1,101 +1,149 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { useEffect, useState, useRef } from "react"
+import { useRouter } from "next/navigation"
+import { Heart, Music, MicOffIcon as MusicOff } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import TypewriterEffect from "@/components/typewriter-effect"
+import ParticleBackground from "@/components/particle-background"
+import { cn } from "@/lib/utils"
+
+// Removed stray ThemeProvider usage that caused the error
+
+
+
+export default function WelcomePage() {
+  const router = useRouter()
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null)
+  const [showButton, setShowButton] = useState(false)
+  const [loaded, setLoaded] = useState(false)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  useEffect(() => {
+    // Inicializa o áudio com tratamento de erro
+    try {
+      const audioElement = new Audio("/music/background-music.mp3")
+      audioElement.loop = true
+      audioElement.volume = 0.5
+
+      // Adiciona um listener para tratar erros de carregamento
+      audioElement.addEventListener("error", (e) => {
+        console.log("Erro ao carregar o áudio de fundo:", e)
+        // Continua sem o áudio
+      })
+
+      audioRef.current = audioElement
+      setAudio(audioElement)
+
+      // Mostra o botão após a animação de digitação
+      const timer = setTimeout(() => {
+        setShowButton(true)
+      }, 5000)
+
+      setLoaded(true)
+
+      return () => {
+        if (audioElement) {
+          audioElement.pause()
+        }
+        clearTimeout(timer)
+      }
+    } catch (error) {
+      console.log("Erro ao criar objeto de áudio:", error)
+      // Continua sem o áudio
+      setLoaded(true)
+    }
+  }, [])
+
+  const toggleMusic = () => {
+    if (!audio) return
+
+    try {
+      if (isPlaying) {
+        audio.pause()
+        setIsPlaying(false)
+      } else {
+        const playPromise = audio.play()
+
+        // Trata a promise retornada por play()
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              setIsPlaying(true)
+            })
+            .catch((error) => {
+              console.log("Erro ao reproduzir áudio de fundo:", error)
+              // Não altera o estado se houver erro
+            })
+        }
+      }
+    } catch (error) {
+      console.log("Erro ao controlar áudio:", error)
+    }
+  }
+
+  const startJourney = () => {
+    router.push("/capitulo-1")
+  }
+
+  if (!loaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-pink-100 to-lavender-100">
+        <Heart className="h-12 w-12 text-pink-500 animate-pulse" />
+      </div>
+    )
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-pink-100 to-lavender-100 p-4 relative overflow-hidden">
+      <ParticleBackground type="hearts" />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <div className="absolute top-4 right-4 z-10">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleMusic}
+          className="rounded-full bg-white/80 hover:bg-white/90 shadow-md"
+        >
+          {isPlaying ? <MusicOff className="h-5 w-5 text-pink-500" /> : <Music className="h-5 w-5 text-pink-500" />}
+        </Button>
+      </div>
+
+      <div className="max-w-md w-full text-center space-y-8 relative z-10">
+        <div className="absolute -top-16 left-1/2 transform -translate-x-1/2">
+          <Heart className="h-12 w-12 text-red-500 animate-pulse" />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+
+        <h1 className="text-3xl md:text-4xl font-bold text-pink-600 mb-6 font-dancing">Feliz Aniversário, Juliana!</h1>
+
+        <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-xl border border-pink-200">
+          <TypewriterEffect
+            text="Prepare-se para uma viagem no tempo… com muito amor, diversão e surpresas 💘"
+            speed={50}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+          <div
+            className={cn(
+              "mt-8 transition-all duration-1000 ease-in-out",
+              showButton ? "opacity-100 transform translate-y-0" : "opacity-0 transform translate-y-4",
+            )}
+          >
+            <Button
+              onClick={startJourney}
+              className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white px-8 py-2 rounded-full shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105"
+            >
+              Começar nossa história
+            </Button>
+          </div>
+        </div>
+
+        <div className="text-sm text-pink-700 mt-4 animate-fade-in font-dancing text-lg">
+          Um presente especial para você ❤️
+        </div>
+      </div>
+
+      <div className="absolute bottom-0 w-full h-16 bg-gradient-to-t from-pink-200/50 to-transparent" />
     </div>
-  );
+  )
 }
