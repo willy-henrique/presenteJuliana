@@ -36,11 +36,11 @@ export default function Capitulo2() {
       }, 800)
 
       // Inicia o movimento dos personagens após 2 segundos
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       setCharactersMoving(true)
 
       // Os personagens se encontram após 3 segundos
-      await new Promise((resolve) => setTimeout(resolve, 3000))
+      await new Promise((resolve) => setTimeout(resolve, 2000))
       setCharactersMet(true)
 
       // Mostra o texto após os personagens se encontrarem

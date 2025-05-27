@@ -4,41 +4,59 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, Heart } from "lucide-react"
+import { ChevronLeft, ChevronRight, Gamepad2 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import ParticleBackground from "@/components/particle-background"
 
 const chapters = [
   {
     id: 1,
-    title: "Nossos Primeiros Momentos",
+    title: "Página 1 e 2",
     photos: [
-      { src: "/images/encontro.jpg", alt: "Nosso primeiro encontro" },
-      { src: "/images/festa.jpg", alt: "Nosso momento especial" },
+      { src: "/photos/foto1.jpg", alt: "Foto 1" },
+      { src: "/photos/foto2.jpg", alt: "Foto 2" },
     ],
-    text: "Cada foto guarda uma memória, cada olhar conta uma história. Esses são os registros dos primeiros momentos em que descobrimos o quanto éramos especiais um para o outro.",
+    text: "Nossos primeiros momentos juntos! Cada foto é uma memória viva desse amor que cresce mais a cada dia.",
   },
   {
     id: 2,
-    title: "Risadas Compartilhadas",
+    title: "Página 3 e 4",
     photos: [
-      { src: "/images/fotovolei.jpg", alt: "Jogando Vôlei" },
-      { src: "/images/encontro.jpg", alt: "Mais risadas juntos" },
+      { src: "/photos/foto3.jpg", alt: "Foto 3" },
+      { src: "/photos/foto4.jpg", alt: "Foto 4" },
     ],
-    text: "Se tem algo que marcou nosso começo foram as risadas que ecoavam quando estávamos juntos. Até nos momentos mais simples, você conseguia tornar tudo especial.",
+    text: "Sorrisos, aventuras e cumplicidade… Cada clique é um pedaço da nossa história!",
   },
   {
     id: 3,
-    title: "Eternidade em Fotos",
+    title: "Página 5 e 6",
     photos: [
-      { src: "/images/personagem-eu.jpg", alt: "Eu te observando" },
-      { src: "/images/bebedouro.jpg", alt: "Nosso lugar especial" },
+      { src: "/photos/foto5.jpg", alt: "Foto 5" },
+      { src: "/photos/foto6.jpg", alt: "Foto 6" },
     ],
-    text: "Essas fotos são mais que imagens, são promessas de um amor que queremos viver todos os dias. Cada frame guarda a essência do que somos juntos.",
+    text: "Seja nas coisas simples ou nos momentos mais especiais, você transforma tudo em felicidade.",
+  },
+  {
+    id: 4,
+    title: "Página 7 e 8",
+    photos: [
+      { src: "/photos/foto7.jpg", alt: "Foto 7" },
+      { src: "/photos/foto8.jpg", alt: "Foto 8" },
+    ],
+    text: "Nossas lembranças são capítulos de um livro que só nós dois sabemos escrever.",
+  },
+  {
+    id: 5,
+    title: "Página 9 (Final)",
+    photos: [
+      { src: "/photos/foto9.jpg", alt: "Foto 9" },
+      { src: "/photos/foto1.jpg", alt: "Foto 1 novamente" },
+    ],
+    text: "E que esse livro nunca tenha fim. Que possamos continuar colecionando memórias, amor e vida juntos.",
   },
 ]
 
-export default function LivroDeAmor() {
+export default function Galeria() {
   const router = useRouter()
   const [currentChapter, setCurrentChapter] = useState(0)
 
@@ -54,8 +72,8 @@ export default function LivroDeAmor() {
     }
   }
 
-  const goToSurprise = () => {
-    router.push("/mensagem-final")
+  const goToJogos = () => {
+    router.push("/jogos")
   }
 
   return (
@@ -72,12 +90,13 @@ export default function LivroDeAmor() {
           <h1 className="text-4xl font-bold text-rose-600 mb-2 font-dancing">
             Willy e Juliana
           </h1>
-          <p className="text-pink-500 italic">Nossa história em capítulos</p>
+          <p className="text-pink-500 italic">Nossa Galeria em um Livro de Amor</p>
         </motion.div>
 
-        <div className="relative w-full mx-auto bg-white rounded-xl shadow-2xl border-4 border-rose-200 overflow-hidden
-            aspect-[3/2] md:aspect-[3/2] sm:aspect-square">
-          
+        <div
+          className="relative w-full mx-auto bg-white rounded-xl shadow-2xl border-4 border-rose-200 overflow-hidden
+          aspect-square md:aspect-[3/2]"
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={chapters[currentChapter].id}
@@ -85,7 +104,7 @@ export default function LivroDeAmor() {
               initial={{ rotateY: 90, opacity: 0 }}
               animate={{ rotateY: 0, opacity: 1 }}
               exit={{ rotateY: -90, opacity: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.7 }}
             >
               {chapters[currentChapter].photos.map((photo, index) => (
                 <div
@@ -107,9 +126,9 @@ export default function LivroDeAmor() {
             </motion.div>
           </AnimatePresence>
 
-          {/* Texto fixo na parte de baixo */}
+          {/* Texto do capítulo fixo na parte de baixo */}
           <div className="absolute bottom-0 left-0 right-0 bg-white/90 rounded-t-lg p-4 shadow-md">
-            <h2 className="text-lg md:text-xl font-semibold text-rose-600 mb-1 text-center">
+            <h2 className="text-base md:text-xl font-semibold text-rose-600 mb-1 text-center">
               {chapters[currentChapter].title}
             </h2>
             <p className="text-gray-700 text-xs md:text-sm text-center">
@@ -158,14 +177,14 @@ export default function LivroDeAmor() {
           ))}
         </div>
 
-        {/* Botão para surpresa */}
+        {/* Botão para Jogos */}
         <div className="flex justify-center mt-8">
           <Button
-            onClick={goToSurprise}
+            onClick={goToJogos}
             className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105 flex items-center gap-2"
           >
-            <Heart className="h-5 w-5" fill="currentColor" />
-            <span>A carta.</span>
+            <Gamepad2 className="h-5 w-5" />
+            <span>Ir para Jogos</span>
           </Button>
         </div>
       </div>
