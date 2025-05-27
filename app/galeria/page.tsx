@@ -8,7 +8,7 @@ import { ChevronLeft, ChevronRight, Heart, Volume2, VolumeX } from "lucide-react
 import { motion, AnimatePresence } from "framer-motion";
 import ParticleBackground from "@/components/particle-background";
 
-// Fotos da galeria
+// Dados das páginas da galeria
 const chapters = [
   {
     id: 1,
@@ -51,7 +51,7 @@ const chapters = [
     title: "Página 9",
     photos: [
       { src: "/photos/foto9.jpg", alt: "Foto 9" },
-      { src: "/photos/foto1.jpg", alt: "Foto 1 (Repetida para completar o livro)" },
+      { src: "/photos/foto1.jpg", alt: "Foto 1 (Repetida para completar)" },
     ],
     text: "Promessa de amor eterno, construindo memórias para a vida inteira.",
   },
@@ -80,7 +80,7 @@ export default function Galeria() {
 
   const toggleMusic = () => {
     setIsPlaying(!isPlaying);
-    // Aqui você pode colocar sua lógica de som
+    // Lógica de som pode ser implementada aqui
   };
 
   return (
@@ -94,7 +94,9 @@ export default function Galeria() {
           <h1 className="text-4xl font-bold text-rose-600 font-dancing">
             Willy e Juliana
           </h1>
-          <p className="text-pink-500 italic">Nossa Galeria em um Livro de Amor</p>
+          <p className="text-pink-500 italic">
+            Nossa Galeria em um Livro de Amor
+          </p>
         </div>
         <Button
           variant="ghost"
@@ -113,7 +115,7 @@ export default function Galeria() {
       {/* Livro */}
       <div
         className="relative w-full mx-auto bg-white rounded-xl shadow-2xl border-4 border-rose-200 overflow-hidden
-        aspect-[4/5] md:aspect-[3/2] max-w-[500px] md:max-w-4xl"
+        aspect-[4/5] md:aspect-[3/2] max-w-[500px] md:max-w-5xl"
       >
         <AnimatePresence mode="wait">
           <motion.div
@@ -122,7 +124,7 @@ export default function Galeria() {
             initial={{ rotateY: 90, opacity: 0 }}
             animate={{ rotateY: 0, opacity: 1 }}
             exit={{ rotateY: -90, opacity: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
           >
             {chapters[currentChapter].photos.map((photo, index) => (
               <div
@@ -145,16 +147,16 @@ export default function Galeria() {
         </AnimatePresence>
 
         {/* Texto na parte inferior */}
-        <div className="absolute bottom-0 left-0 right-0 bg-white/90 rounded-t-lg p-4 shadow-md">
-          <h2 className="text-lg md:text-xl font-semibold text-rose-600 mb-1 text-center">
+        <div className="absolute bottom-2 left-4 right-4 bg-white/70 backdrop-blur-md rounded-xl p-2 shadow-md">
+          <h2 className="text-sm md:text-lg font-semibold text-rose-600 text-center">
             {chapters[currentChapter].title}
           </h2>
-          <p className="text-gray-700 text-xs md:text-sm text-center">
+          <p className="text-gray-700 text-[10px] md:text-sm text-center">
             {chapters[currentChapter].text}
           </p>
         </div>
 
-        {/* Botões de navegação */}
+        {/* Navegação */}
         <div className="absolute top-1/2 left-2 transform -translate-y-1/2">
           <Button
             variant="ghost"
@@ -195,7 +197,7 @@ export default function Galeria() {
         ))}
       </div>
 
-      {/* Botão Ir para Jogos */}
+      {/* Botão para Jogos */}
       <div className="flex justify-center mt-8">
         <Button
           onClick={goToJogos}
