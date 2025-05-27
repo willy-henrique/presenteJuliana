@@ -75,7 +75,9 @@ export default function LivroDeAmor() {
           <p className="text-pink-500 italic">Nossa história em capítulos</p>
         </motion.div>
 
-        <div className="relative w-full max-w-3xl aspect-[3/2] mx-auto bg-white rounded-xl shadow-2xl border-4 border-rose-200 overflow-hidden">
+        <div className="relative w-full mx-auto bg-white rounded-xl shadow-2xl border-4 border-rose-200 overflow-hidden
+            aspect-[3/2] md:aspect-[3/2] sm:aspect-square">
+          
           <AnimatePresence mode="wait">
             <motion.div
               key={chapters[currentChapter].id}
@@ -88,7 +90,7 @@ export default function LivroDeAmor() {
               {chapters[currentChapter].photos.map((photo, index) => (
                 <div
                   key={index}
-                  className="relative border-b md:border-b-0 md:border-r last:border-0 border-pink-200 h-full"
+                  className="relative border-b md:border-b-0 md:border-r last:border-0 border-pink-200"
                 >
                   <Image
                     src={photo.src}
@@ -105,12 +107,12 @@ export default function LivroDeAmor() {
             </motion.div>
           </AnimatePresence>
 
-          {/* Texto do capítulo fixo na parte de baixo */}
+          {/* Texto fixo na parte de baixo */}
           <div className="absolute bottom-0 left-0 right-0 bg-white/90 rounded-t-lg p-4 shadow-md">
-            <h2 className="text-xl font-semibold text-rose-600 mb-1 text-center">
+            <h2 className="text-lg md:text-xl font-semibold text-rose-600 mb-1 text-center">
               {chapters[currentChapter].title}
             </h2>
-            <p className="text-gray-700 text-sm text-center">
+            <p className="text-gray-700 text-xs md:text-sm text-center">
               {chapters[currentChapter].text}
             </p>
           </div>
