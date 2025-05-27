@@ -6,6 +6,12 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import ParticleBackground from "@/components/particle-background"
 import { cn } from "@/lib/utils"
+// Defina um contexto de áudio local simples se não houver módulo existente
+const audioContext = {
+  audio: typeof window !== "undefined" ? new Audio("/audio/background.mp3") : null,
+  isPlaying: false,
+}
+import { Music, MicOffIcon as MusicOff } from "lucide-react"
 
 export default function Capitulo2() {
   const router = useRouter()
@@ -13,6 +19,9 @@ export default function Capitulo2() {
   const [showText, setShowText] = useState(false)
   const [showButton, setShowButton] = useState(false)
   const [lightsOn, setLightsOn] = useState(true)
+  const [charactersMoving, setCharactersMoving] = useState(false)
+  const [charactersMet, setCharactersMet] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(audioContext.isPlaying)
   const lightsInterval = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
@@ -26,11 +35,19 @@ export default function Capitulo2() {
         setLightsOn((prev) => !prev)
       }, 800)
 
-      // Mostra o texto após 3 segundos
+      // Inicia o movimento dos personagens após 2 segundos
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+      setCharactersMoving(true)
+
+      // Os personagens se encontram após 3 segundos
       await new Promise((resolve) => setTimeout(resolve, 3000))
+      setCharactersMet(true)
+
+      // Mostra o texto após os personagens se encontrarem
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       setShowText(true)
 
-      // Mostra o botão após 5 segundos
+      // Mostra o botão após o texto aparecer
       await new Promise((resolve) => setTimeout(resolve, 2000))
       setShowButton(true)
     }
@@ -44,6 +61,35 @@ export default function Capitulo2() {
     }
   }, [])
 
+  const toggleMusic = () => {
+    if (!audioContext.audio) return
+
+    try {
+      if (isPlaying) {
+        audioContext.audio.pause()
+        setIsPlaying(false)
+        audioContext.isPlaying = false
+      } else {
+        const playPromise = audioContext.audio.play()
+
+        // Trata a promise retornada por play()
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              setIsPlaying(true)
+              audioContext.isPlaying = true
+            })
+            .catch((error) => {
+              console.log("Erro ao reproduzir áudio de fundo:", error)
+              // Não altera o estado se houver erro
+            })
+        }
+      }
+    } catch (error) {
+      console.log("Erro ao controlar áudio:", error)
+    }
+  }
+
   const goToNextChapter = () => {
     router.push("/capitulo-3")
   }
@@ -51,6 +97,17 @@ export default function Capitulo2() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-purple-900 to-indigo-900 p-4 relative overflow-hidden">
       <ParticleBackground type="party" />
+
+      <div className="absolute top-4 right-4 z-10">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleMusic}
+          className="rounded-full bg-white/80 hover:bg-white/90 shadow-md"
+        >
+          {isPlaying ? <MusicOff className="h-5 w-5 text-pink-500" /> : <Music className="h-5 w-5 text-pink-500" />}
+        </Button>
+      </div>
 
       {/* Luzes da festa */}
       <div
@@ -85,30 +142,74 @@ export default function Capitulo2() {
             {step >= 1 && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="relative w-full h-full">
-                  <div className="absolute left-10 bottom-10 transform transition-all duration-1000 ease-in-out animate-slide-left-right">
+                  {/* Personagem Willy (eu) */}
+                  <div
+                    className={cn(
+                      "absolute bottom-10 transition-all duration-3000 ease-in-out",
+                      charactersMoving
+                        ? charactersMet
+                          ? "left-1/2 transform -translate-x-16" // Posição final próxima ao centro
+                          : "left-1/3 transform -translate-x-8" // Posição intermediária
+                        : "left-10", // Posição inicial
+                    )}
+                  >
                     <Image
                       src="/images/personagem-eu.jpg"
                       alt="Eu"
-                      width={60}
-                      height={110}
+                      width={80}
+                      height={150}
                       className="object-contain"
                     />
                   </div>
 
-                  <div className="absolute right-10 bottom-10">
-                    <div className="relative">
-                      <Image
-                        src="/images/personagem-juliana.jpg"
-                        alt="Juliana"
-                        width={60}
-                        height={110}
-                        className="object-contain animate-slide-in-right"
-                      />
-                      {step >= 1 && (
-                        <div className="absolute top-10 left-8 w-4 h-4 bg-yellow-300 rounded-full animate-glow"></div>
-                      )}
-                    </div>
+                  {/* Personagem Juliana */}
+                  <div
+                    className={cn(
+                      "absolute bottom-10 transition-all duration-3000 ease-in-out",
+                      charactersMoving
+                        ? charactersMet
+                          ? "right-1/2 transform translate-x-16" // Posição final próxima ao centro
+                          : "right-1/3 transform translate-x-8" // Posição intermediária
+                        : "right-10", // Posição inicial
+                    )}
+                  >
+                    <Image
+                      src="/images/personagem-juliana.jpg"
+                      alt="Juliana"
+                      width={80}
+                      height={150}
+                      className="object-contain animate-slide-in-right"
+                    />
                   </div>
+
+                  {/* Efeito de brilho quando se encontram */}
+                  {charactersMet && (
+                    <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2">
+                      <div className="w-8 h-8 bg-pink-400/60 rounded-full animate-pulse blur-sm"></div>
+                      <div className="absolute inset-0 w-8 h-8 bg-white/40 rounded-full animate-ping"></div>
+                    </div>
+                  )}
+
+                  {/* Corações flutuando quando se encontram */}
+                  {charactersMet && (
+                    <>
+                      <div className="absolute bottom-20 left-1/2 transform -translate-x-4 text-red-400 text-lg animate-float">
+                        💕
+                      </div>
+                      <div
+                        className="absolute bottom-24 left-1/2 transform translate-x-2 text-pink-400 text-sm animate-float"
+                        style={{ animationDelay: "0.5s" }}
+                      >
+                        ✨
+                      </div>
+                      <div
+                        className="absolute bottom-18 left-1/2 transform -translate-x-6 text-red-300 text-xs animate-float"
+                        style={{ animationDelay: "1s" }}
+                      >
+                        💖
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             )}
@@ -120,7 +221,11 @@ export default function Capitulo2() {
               showText ? "opacity-100" : "opacity-0",
             )}
           >
-            <p className="text-lg italic font-dancing">"Ali, entre tantas pessoas… um olhar me encontrou."</p>
+            <p className="text-lg italic font-dancing">
+              {charactersMet
+                ? "Ali, entre tantas pessoas… nossos olhares se encontraram e o mundo parou."
+                : "Ali, entre tantas pessoas… um olhar me encontrou."}
+            </p>
           </div>
 
           <div className="flex justify-center">
