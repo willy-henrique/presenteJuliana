@@ -121,7 +121,7 @@ export default function Capitulo5() {
       <div className="max-w-md w-full relative z-10">
         <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/30 relative">
           <h1 className="text-3xl font-bold text-center mb-4 font-dancing text-pink-600">
-            Capítulo 5 - O Beijo no Bebedouro
+            Capítulo 5 - O xeque-mate no bebedouro
           </h1>
 
           <div className="relative w-full h-64 mb-6 overflow-hidden rounded-xl shadow-lg border-2 border-pink-100">
