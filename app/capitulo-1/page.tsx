@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
@@ -17,24 +17,24 @@ export default function Capitulo1() {
   const dialogContent = [
     {
       title: "Ana Beatriz",
-      message: "Ei, vamos sair hoje! Tem uma festa incrível no Fluxo de Goiânia!",
-      emoji: "🎉",
+      message: "Ei, vamos sair hoje! Tem uma festa incrÃ­vel no Fluxo de GoiÃ¢nia!",
+      emoji: "ðŸŽ‰",
     },
     {
       title: "Ana Beatriz",
-      message: "Ah, não seja chato! Vai ser divertido, prometo!",
-      emoji: "😜",
+      message: "Ah, nÃ£o seja chato! Vai ser divertido, prometo!",
+      emoji: "ðŸ˜œ",
     },
     {
       title: "Ana Beatriz",
       message:
-        "Olha, eu não aceito não como resposta. Você PRECISA ir! Tem alguém especial que você precisa conhecer...",
-      emoji: "😏",
+        "Olha, eu nÃ£o aceito nÃ£o como resposta. VocÃª PRECISA ir! Tem alguÃ©m especial que vocÃª precisa conhecer...",
+      emoji: "ðŸ˜",
     },
   ]
 
   useEffect(() => {
-    // Inicia a animação dos objetos após um pequeno delay
+    // Inicia a animaÃ§Ã£o dos objetos apÃ³s um pequeno delay
     const timer = setTimeout(() => {
       setAnimateObjects(true)
     }, 500)
@@ -78,7 +78,7 @@ export default function Capitulo1() {
       <div className="max-w-md w-full relative z-10">
         <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-xl border border-pink-200">
           <h1 className="text-2xl font-bold text-pink-600 mb-4 text-center font-dancing">
-            Capítulo 1 - O Convite da Ana Beatriz
+            CapÃ­tulo 1 - O Convite da Ana Beatriz
           </h1>
 
           <div className="relative w-full aspect-[3/4] mb-6 rounded-xl overflow-hidden shadow-xl border-2 border-pink-200">
@@ -99,7 +99,7 @@ export default function Capitulo1() {
   ></div>
 </div>
           <p className="text-gray-700 mb-6 leading-relaxed">
-            Era uma sexta-feira comum. Você estava em casa, relaxando depois de uma semana cansativa, quando seu celular
+            Era uma sexta-feira comum. VocÃª estava em casa, relaxando depois de uma semana cansativa, quando seu celular
             tocou com uma mensagem da Ana Beatriz...
           </p>
 
@@ -111,7 +111,7 @@ export default function Capitulo1() {
                 buttonClicked && "opacity-50 pointer-events-none",
               )}
             >
-              "Não quero sair hoje..."
+              Nao quero sair hoje...
             </Button>
           </div>
         </div>
@@ -130,7 +130,7 @@ export default function Capitulo1() {
               onClick={handleNextDialog}
               className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white"
             >
-              {dialogStep < dialogContent.length - 1 ? "Continuar" : "Tudo bem, vamos lá..."}
+              {dialogStep < dialogContent.length - 1 ? "Continuar" : "Tudo bem, vamos lÃ¡..."}
             </Button>
           </div>
         </DialogContent>

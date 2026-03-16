@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
@@ -17,12 +17,12 @@ export default function Capitulo4() {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Mostra o botão após 3 segundos
+    // Mostra o botÃ£o apÃ³s 3 segundos
     const timer = setTimeout(() => {
       setShowButton(true)
     }, 3000)
 
-    // Inicia a animação da bola
+    // Inicia a animaÃ§Ã£o da bola
     startBallAnimation()
 
     return () => {
@@ -45,7 +45,7 @@ export default function Capitulo4() {
       velocity += gravity
       y += velocity
 
-      // Verifica colisão com o "chão"
+      // Verifica colisÃ£o com o "chÃ£o"
       if (y > 70) {
         y = 70
         velocity = -velocity * bounce
@@ -71,12 +71,12 @@ export default function Capitulo4() {
     // Tenta reproduzir som de bola quicando
     try {
       const audio = new Audio("/sounds/bola-quicando.mp3")
-      audio.play().catch((err) => console.log("Erro ao reproduzir áudio:", err))
+      audio.play().catch((err) => console.log("Erro ao reproduzir Ã¡udio:", err))
     } catch (error) {
-      console.log("Erro ao criar objeto de áudio:", error)
+      console.log("Erro ao criar objeto de Ã¡udio:", error)
     }
 
-    // Adiciona um impulso à bola
+    // Adiciona um impulso Ã  bola
     const newVelocity = -8
     let y = ballPosition.y
     let velocity = newVelocity
@@ -84,12 +84,12 @@ export default function Capitulo4() {
     const bounce = 0.8
     let direction = ballDirection
 
-    // Cancela a animação atual
+    // Cancela a animaÃ§Ã£o atual
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current)
     }
 
-    // Inicia uma nova animação com impulso
+    // Inicia uma nova animaÃ§Ã£o com impulso
     const animate = () => {
       velocity += gravity
       y += velocity
@@ -111,7 +111,7 @@ export default function Capitulo4() {
 
     animationRef.current = requestAnimationFrame(animate)
 
-    // Remove o efeito de clique após 300ms
+    // Remove o efeito de clique apÃ³s 300ms
     setTimeout(() => {
       setBallClicked(false)
     }, 300)
@@ -142,18 +142,18 @@ export default function Capitulo4() {
       <div className="max-w-md w-full relative z-10">
         <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-xl border border-blue-300">
           <h1 className="text-2xl font-bold text-blue-600 mb-4 text-center font-dancing">
-            Capítulo 4 - Nosso Primeiro Encontro: Jogando Vôlei
+            CapÃ­tulo 4 - Nosso Primeiro Encontro: Jogando VÃ´lei
           </h1>
 
           <div className="relative w-full h-64 mb-6 overflow-hidden rounded-lg bg-gradient-to-b from-blue-200 to-green-200">
-            {/* Céu e grama */}
+            {/* CÃ©u e grama */}
             <div className="absolute inset-0 bg-gradient-to-b from-blue-300/30 to-green-300/30"></div>
 
-            {/* Rede de vôlei */}
+            {/* Rede de vÃ´lei */}
             <div className="absolute left-0 right-0 top-1/3 h-16 border-t-2 border-dashed border-white/70"></div>
             <div className="absolute left-1/2 top-1/4 bottom-1/4 w-px bg-white/70 transform -translate-x-1/2"></div>
 
-            {/* Bola de vôlei animada */}
+            {/* Bola de vÃ´lei animada */}
             <div
               className={cn(
                 "absolute w-12 h-12 rounded-full bg-white border-2 border-gray-300 cursor-pointer transition-transform",
@@ -182,7 +182,7 @@ export default function Capitulo4() {
               <div className="relative w-3/4 h-32 rounded-lg overflow-hidden shadow-lg border-2 border-blue-300">
                 <Image
                   src="/images/fotovolei.jpg"
-                  alt="Foto do nosso primeiro encontro jogando vôlei"
+                  alt="Foto do nosso primeiro encontro jogando vÃ´lei"
                   fill
                   className="object-cover"
                 />
@@ -192,7 +192,7 @@ export default function Capitulo4() {
 
           <div className="text-center mb-6">
             <p className="text-gray-700 italic font-dancing text-lg">
-              "Nosso primeiro encontro foi especial… jogando vôlei, conversando, rindo e nos conhecendo de verdade."
+              Nosso primeiro encontro foi especial... jogando volei, conversando, rindo e nos conhecendo de verdade.
             </p>
           </div>
 

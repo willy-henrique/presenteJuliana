@@ -1,109 +1,106 @@
-"use client"
+﻿"use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Heart } from "lucide-react"
-import Confetti from "@/components/confetti"
-import ParticleBackground from "@/components/particle-background"
+import { ArrowLeft, CalendarDays, Clock3, HeartHandshake } from "lucide-react"
+import { getDurationParts } from "@/lib/relationship-time"
+
+const relationshipStartAt = new Date("2024-10-26T00:00:00-03:00")
+const relationshipEndAt = new Date("2026-03-15T15:00:00-03:00")
 
 export default function MensagemFinal() {
+  const router = useRouter()
   const [showMessage, setShowMessage] = useState(false)
-  const [showConfetti, setShowConfetti] = useState(false)
+
+  const duration = getDurationParts(relationshipStartAt, relationshipEndAt)
+  const years = Math.floor(duration.months / 12)
+  const remainingMonths = duration.months % 12
 
   const openMessage = () => {
     setShowMessage(true)
-    setShowConfetti(true)
+  }
 
-    // Tenta reproduzir o som de coração batendo com tratamento de erro
-    try {
-      const audio = new Audio("/sounds/heartbeat.mp3")
-
-      // Adiciona um listener para tratar erros de carregamento
-      audio.addEventListener("error", (e) => {
-        console.log("Erro ao carregar o áudio:", e)
-        // Continua com a interação mesmo sem o áudio
-      })
-
-      // Tenta reproduzir o áudio
-      const playPromise = audio.play()
-
-      // Trata a promise retornada por play()
-      if (playPromise !== undefined) {
-        playPromise.catch((error) => {
-          console.log("Erro ao reproduzir áudio:", error)
-          // Continua com a interação mesmo sem o áudio
-        })
-      }
-    } catch (error) {
-      console.log("Erro ao criar objeto de áudio:", error)
-      // Continua com a interação mesmo sem o áudio
+  const goBack = () => {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back()
+      return
     }
+    router.push("/capitulo-6")
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-red-100 to-pink-100 p-4 relative overflow-hidden">
-      {showConfetti && <Confetti />}
-      <ParticleBackground type="hearts" />
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-stone-100 via-rose-50 to-zinc-100 p-4 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(244,63,94,0.08),transparent_55%)] pointer-events-none" />
+      <div className="absolute top-4 left-4 z-20">
+        <Button
+          onClick={goBack}
+          variant="ghost"
+          size="sm"
+          className="bg-white/80 hover:bg-white text-rose-700 border border-rose-200 shadow-sm"
+        >
+          <ArrowLeft className="h-4 w-4 mr-1" />
+          Voltar
+        </Button>
+      </div>
 
       <div className="max-w-md w-full relative z-10">
-        <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-xl border border-pink-300">
-          <h1 className="text-2xl font-bold text-pink-600 mb-4 text-center font-dancing">Mensagem Final</h1>
+        <div className="bg-white/95 backdrop-blur-sm rounded-xl p-6 shadow-xl border border-rose-200">
+          <h1 className="text-2xl font-bold text-rose-700 mb-4 text-center font-dancing">Nosso Ultimo Capitulo</h1>
 
           {!showMessage ? (
             <div className="flex flex-col items-center gap-6">
-              <div className="relative w-full h-64 bg-gradient-to-br from-pink-50 to-lavender-100 rounded-lg border-2 border-dashed border-pink-300 flex items-center justify-center overflow-hidden">
-                <div className="absolute inset-0">
-                  <div className="absolute top-5 left-5 text-pink-200 text-4xl animate-float-delayed">✨</div>
-                  <div className="absolute bottom-5 right-5 text-pink-200 text-4xl animate-float">✨</div>
-                </div>
+              <div className="relative w-full h-64 bg-gradient-to-br from-rose-50 to-stone-100 rounded-lg border border-rose-200 flex items-center justify-center overflow-hidden">
                 <div className="text-center z-10">
-                  <div className="relative">
-                    <Heart className="mx-auto text-pink-400 mb-2 animate-pulse" size={48} />
-                    <div className="absolute inset-0 bg-pink-400 rounded-full animate-ping opacity-20"></div>
-                  </div>
-                  <p className="text-pink-600 font-dancing text-xl">Uma carta especial para você</p>
+                  <HeartHandshake className="mx-auto text-rose-400 mb-3" size={44} />
+                  <p className="text-rose-700 font-dancing text-xl">Uma carta de gratidao e despedida</p>
                 </div>
               </div>
 
               <Button
                 onClick={openMessage}
-                className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white px-6 py-2 rounded-full shadow-md transition-all duration-300 hover:shadow-xl hover:scale-105"
+                className="bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white px-6 py-2 rounded-full shadow-md transition-all duration-300 hover:shadow-xl hover:scale-105"
               >
                 Abrir a carta
               </Button>
             </div>
           ) : (
             <div className="animate-fade-in">
-              <div className="bg-gradient-to-br from-pink-50 to-lavender-50 rounded-lg p-6 border border-pink-200 mb-6 shadow-inner">
-                <p className="text-pink-800 mb-4 font-dancing text-xl">Querida Juliana,</p>
-                <p className="text-pink-800 mb-4">
-                  Feliz aniversário, meu amor! Este pequeno presente digital é apenas uma forma de expressar o quanto
-                  você é especial para mim.
-                </p>
-                <p className="text-pink-800 mb-4">
-                  Desde aquele dia no Fluxo de Goiânia, minha vida mudou completamente. Você trouxe cor, alegria e tanto
-                  amor que às vezes nem acredito na sorte que tive em te encontrar.
-                </p>
-                <p className="text-pink-800 mb-4">
-                  Obrigado por cada momento, cada risada, cada abraço. Obrigado por ser exatamente quem você é - a
-                  pessoa mais incrível que já conheci.
-                </p>
-                <p className="text-pink-800 mb-4">
-                  Que este novo ano da sua vida seja repleto de realizações, felicidade e muito amor. Estarei sempre ao
-                  seu lado, celebrando cada conquista e apoiando em cada desafio.
-                </p>
-                <p className="text-pink-800 font-bold font-dancing text-xl">Te amo infinitamente,</p>
-                <p className="text-pink-800 font-bold font-dancing text-xl">Seu amor Willy Henrique</p>
-              </div>
-
-              <div className="text-center">
-                <p className="text-pink-600 mb-4">Escaneie o QR Code abaixo para acessar este site novamente:</p>
-                <div className="bg-white p-4 rounded-lg inline-block shadow-md">
-                  <div className="w-48 h-48 bg-gray-200 mx-auto relative">
-                    {/* Aqui será inserido o QR Code gerado */}
-                    <div className="absolute inset-0 flex items-center justify-center text-gray-500">QR Code</div>
+              <div className="bg-gradient-to-br from-rose-50 to-stone-50 rounded-lg p-6 border border-rose-200 mb-6 shadow-inner">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+                  <div className="bg-white/80 rounded-md border border-rose-100 px-3 py-2 text-sm text-rose-800 flex items-center gap-2">
+                    <CalendarDays className="h-4 w-4 text-rose-500" />
+                    <span>Fim: 15/03/2026 as 15:00</span>
+                  </div>
+                  <div className="bg-white/80 rounded-md border border-rose-100 px-3 py-2 text-sm text-rose-800 flex items-center gap-2">
+                    <Clock3 className="h-4 w-4 text-rose-500" />
+                    <span>{duration.totalHours.toLocaleString("pt-BR")} horas</span>
                   </div>
                 </div>
+
+                <p className="text-rose-800 mb-4 font-dancing text-xl">Juliana,</p>
+                <p className="text-rose-800 mb-4">
+                  15/03/2026 as 15:00, nosso relacionamento chega ao fim. Foram {years} ano, {remainingMonths}{" "}
+                  meses e {duration.days} dias de historia, equivalentes a {duration.months} meses e {duration.days} dias,
+                  {" "}{duration.totalDays} dias e {duration.totalHours.toLocaleString("pt-BR")} horas.
+                </p>
+                <p className="text-rose-800 mb-4">
+                  Quero agradecer por todos os momentos que vivemos, por cada sorriso, cada abraco, cada conversa e cada
+                  aprendizado que dividimos nesse tempo.
+                </p>
+                <p className="text-rose-800 mb-4">
+                  A gente se ama, e isso e verdadeiro. Mas as brigas e outros motivos nos trouxeram ate aqui, e seguir
+                  separados virou a decisao mais honesta para nos dois.
+                </p>
+                <p className="text-rose-800 mb-4">
+                  Levo comigo gratidao, respeito e carinho por tudo o que fomos. Obrigado por ter feito parte da minha
+                  vida e da minha historia.
+                </p>
+                <p className="text-rose-800 mb-4 font-semibold">
+                  Eu te amo, Obrigado por ser essa mulher perfeita!
+                </p>
+                <p className="text-rose-800 font-bold font-dancing text-xl">Com amor e paz,</p>
+                <p className="text-rose-800 font-bold font-dancing text-xl">Willy Henrique</p>
               </div>
             </div>
           )}
